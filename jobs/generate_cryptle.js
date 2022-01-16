@@ -15,19 +15,29 @@ const pickRandomCryptle = async () => {
   return newCryptle;
 };
 
-const hasMatchInRecentCryptles = async (newCryptle) => {
+const getCurrentCryptleNumber = async () => {
   const recentCryptles = await cache.get("recent-cryptles");
-  console.log("recentCryptles");
-  console.log(recentCryptles);
-  console.log(newCryptle);
+  if (!recentCryptles) return 0;
 
-  if (!recentCryptles) return false;
+  return recentCryptles[recentCryptles.length - 1].number + 1;
+};
+
+const isUniqueCryptle = async (newCryptle) => {
+  const recentCryptles = await cache.get("recent-cryptles");
+  console.log("recentCryptles:");
+  console.log(recentCryptles);
+
+  if (!recentCryptles) {
+    console.log("no recents found");
+    return true;
+  }
+
   const found = recentCryptles.find(
     (cryptle) => cryptle.cryptle === newCryptle.cryptle
   );
+  console.log("is unique:", found === undefined);
 
-  console.log("found match:", !!found);
-  return !found;
+  return found === undefined;
 };
 
 const updateListOfRecentCryptles = async (newCryptle) => {
@@ -43,12 +53,19 @@ const generateDailyCryptle = async () => {
   try {
     let newCryptle = "";
 
-    do {
+    const number = await getCurrentCryptleNumber();
+
+    newCryptle = await pickRandomCryptle();
+    let isUnique = await isUniqueCryptle(newCryptle);
+
+    while (!isUnique) {
       newCryptle = await pickRandomCryptle();
-    } while (!(await hasMatchInRecentCryptles(newCryptle)));
+      isUnique = await isUniqueCryptle(newCryptle);
+    }
 
     todaysCryptle.cryptle = newCryptle;
     todaysCryptle.date = Date.now();
+    todaysCryptle.number = number;
   } catch (e) {
     console.error(e);
     return null;
