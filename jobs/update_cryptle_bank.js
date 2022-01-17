@@ -18,6 +18,35 @@ const buildListOfPairs = (listOfIds) => {
   return fullList;
 };
 
+const getThreeLetterTickers = (listOfAssets) => {
+  const tickersList = [];
+  listOfAssets.map(({ symbol: ticker }) => {
+    tickersList.push(ticker.toUpperCase());
+  });
+  return tickersList;
+};
+
+const generateValidGuessList = async () => {
+  const { data: list } = await CoinGeckoClient.coins.markets({ per_page: 100 });
+
+  const filteredTickers = list.filter(({ symbol }) => {
+    if (symbol.length === 3) {
+      return true;
+    }
+  });
+  const filteredNamesObjects = list.filter(({ name }) => {
+    if (name.length === 6) return true;
+  });
+  const filteredNames = filteredNamesObjects.map(({ name }) =>
+    name.toUpperCase()
+  );
+
+  const validTickers = getThreeLetterTickers(filteredTickers);
+  const validGuessList = [...filteredNames, ...validTickers];
+
+  return validGuessList;
+};
+
 const getCryptoTickerList = async () => {
   const { data: list } = await CoinGeckoClient.coins.markets({ per_page: 100 });
 
@@ -44,9 +73,11 @@ const updateBank = async () => {
 
   try {
     const bank = await getCryptoTickerList();
+    const validGuesses = await generateValidGuessList();
     cryptleBank.bankSize = bank.length;
     cryptleBank.bank = bank;
     cryptleBank.updated = Date.now();
+    cryptleBank.validGuesses = validGuesses;
   } catch (e) {
     console.error(e);
     return null;

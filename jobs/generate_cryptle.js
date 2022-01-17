@@ -19,7 +19,7 @@ const getCurrentCryptleNumber = async () => {
   const recentCryptles = await cache.get("recent-cryptles");
   if (!recentCryptles) return 0;
 
-  return recentCryptles[recentCryptles.length - 1].number + 1;
+  return recentCryptles[0].number + 1;
 };
 
 const isUniqueCryptle = async (newCryptle) => {
@@ -43,7 +43,7 @@ const isUniqueCryptle = async (newCryptle) => {
 const updateListOfRecentCryptles = async (newCryptle) => {
   let recentCryptles = await cache.get("recent-cryptles");
   if (!recentCryptles) recentCryptles = [];
-  recentCryptles.push(newCryptle);
+  recentCryptles.unshift(newCryptle);
   await cache.set("recent-cryptles", recentCryptles);
 };
 
