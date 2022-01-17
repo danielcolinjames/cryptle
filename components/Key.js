@@ -1,8 +1,18 @@
-const Key = ({ letter }) => {
+const Key = ({ letter, specialClasses, handleLetterClick, specialClick }) => {
+  if (specialClasses) {
+    return (
+      <button onClick={specialClick} className={specialClasses}>
+        {letter}
+      </button>
+    );
+  }
   return (
-    <div className="w-10 h-10 bg-white flex items-center justify-center rounded-sm">
+    <button
+      onClick={() => handleLetterClick(letter)}
+      className="w-10 h-10 bg-gray-300 flex items-center justify-center rounded-md"
+    >
       <span className="font-sans text-md">{letter}</span>
-    </div>
+    </button>
   );
 };
 
