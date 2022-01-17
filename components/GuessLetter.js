@@ -1,7 +1,27 @@
-const GuessLetter = ({ letter }) => {
+import classNames from "classnames";
+
+const GuessLetter = ({
+  letterIndex,
+  guessLetters,
+  finalized,
+  guessCorrectness,
+  guessIndex,
+}) => {
   return (
-    <div className="w-10 h-10 bg-gray-600 flex items-center justify-center rounded-lg">
-      <span className="font-sans text-md">{letter}</span>
+    <div
+      className={classNames(
+        "w-10 h-10 flex items-center justify-center rounded-lg font-black",
+        {
+          "bg-gray-600": !finalized,
+          "bg-gray-900 text-white": finalized,
+          "bg-green-300 text-black":
+            finalized && guessCorrectness[guessIndex][letterIndex] === 1,
+          "bg-yellow-300 text-black":
+            finalized && guessCorrectness[guessIndex][letterIndex] === -1,
+        }
+      )}
+    >
+      <span className="font-sans text-md">{guessLetters[letterIndex]}</span>
     </div>
   );
 };

@@ -2,7 +2,11 @@ import { useState } from "react";
 import Key from "./Key";
 import KeyboardRow from "./KeyboardRow";
 
-const Keyboard = ({ handleLetterClick, handleBackspace }) => {
+const Keyboard = ({
+  handleLetterClick,
+  handleBackspace,
+  handleConfirmGuess,
+}) => {
   return (
     <div className="bg-black w-full space-y-0.5">
       <KeyboardRow>
@@ -32,6 +36,7 @@ const Keyboard = ({ handleLetterClick, handleBackspace }) => {
         <Key
           letter="->"
           specialClasses="w-20 bg-white rounded-md h-8 flex items-center justify-center"
+          specialClick={handleConfirmGuess}
         />
         <Key letter="Z" handleLetterClick={handleLetterClick} />
         <Key letter="X" handleLetterClick={handleLetterClick} />
