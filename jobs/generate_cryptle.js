@@ -17,7 +17,7 @@ const pickRandomCryptle = async () => {
 
 const getCurrentCryptleNumber = async () => {
   const recentCryptles = await cache.get("recent-cryptles");
-  if (!recentCryptles) return 0;
+  if (!recentCryptles) return 1;
 
   return recentCryptles[0].number + 1;
 };
