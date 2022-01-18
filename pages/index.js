@@ -135,7 +135,11 @@ const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
               onClick={() => setCopied(true)}
             >
               <div className="bg-gray-200 bg-opacity-90 rounded-md p-2 text-black font-sans font-medium">
-                {copied ? <p>Copied to clipboard</p> : <p>Share result</p>}
+                {copied ? (
+                  <p>Copied to clipboard</p>
+                ) : (
+                  <p>Copy result to clipboard</p>
+                )}
               </div>
             </Clipboard>
           </div>
