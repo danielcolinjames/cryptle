@@ -8,8 +8,8 @@ const Keyboard = ({
   handleConfirmGuess,
 }) => {
   return (
-    <div className="bg-black w-full space-y-0.5">
-      <KeyboardRow>
+    <div className="w-full space-y-0.5 absolute bottom-4 right-0 left-0">
+      <KeyboardRow className="px-5">
         <Key letter="Q" handleLetterClick={handleLetterClick} />
         <Key letter="W" handleLetterClick={handleLetterClick} />
         <Key letter="E" handleLetterClick={handleLetterClick} />
@@ -21,7 +21,7 @@ const Keyboard = ({
         <Key letter="O" handleLetterClick={handleLetterClick} />
         <Key letter="P" handleLetterClick={handleLetterClick} />
       </KeyboardRow>
-      <KeyboardRow>
+      <KeyboardRow className="px-10">
         <Key letter="A" handleLetterClick={handleLetterClick} />
         <Key letter="S" handleLetterClick={handleLetterClick} />
         <Key letter="D" handleLetterClick={handleLetterClick} />
@@ -32,10 +32,25 @@ const Keyboard = ({
         <Key letter="K" handleLetterClick={handleLetterClick} />
         <Key letter="L" handleLetterClick={handleLetterClick} />
       </KeyboardRow>
-      <KeyboardRow>
+      <KeyboardRow className="px-1">
         <Key
-          letter="->"
-          specialClasses="w-20 bg-white rounded-md h-8 flex items-center justify-center"
+          icon={
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          }
+          specialClasses="w-14 bg-green-300 rounded-md flex items-center justify-center px-2 py-1.5 md:px-4 md:py-3.5"
           specialClick={handleConfirmGuess}
         />
         <Key letter="Z" handleLetterClick={handleLetterClick} />
@@ -46,8 +61,23 @@ const Keyboard = ({
         <Key letter="N" handleLetterClick={handleLetterClick} />
         <Key letter="M" handleLetterClick={handleLetterClick} />
         <Key
-          letter="<-"
-          specialClasses="w-20 bg-white rounded-md h-8 flex items-center justify-center"
+          icon={
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z"
+              />
+            </svg>
+          }
+          specialClasses="w-14 bg-red-300 rounded-md flex items-center justify-center px-2 py-1.5 md:px-4 md:py-3.5"
           specialClick={handleBackspace}
         />
       </KeyboardRow>

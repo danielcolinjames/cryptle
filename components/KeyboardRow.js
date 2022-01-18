@@ -1,6 +1,13 @@
-const KeyboardRow = ({ children }) => {
+import classNames from "classnames";
+
+const KeyboardRow = ({ children, className }) => {
   return (
-    <div className="flex flex-row w-full items-center justify-center space-x-0.5">
+    <div
+      className={classNames(
+        "flex flex-row w-full items-center justify-center space-x-0.5",
+        className
+      )}
+    >
       {children}
     </div>
   );

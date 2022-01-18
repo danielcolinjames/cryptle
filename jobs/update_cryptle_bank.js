@@ -7,8 +7,10 @@ const CoinGeckoClient = new CoinGecko();
 
 const buildListOfPairs = (listOfIds) => {
   const fullList = [];
-  listOfIds.map(({ symbol: a }) => {
-    listOfIds.map(({ symbol: b }) => {
+  listOfIds.map((asset) => {
+    const { symbol: a } = asset;
+    listOfIds.map((innerAsset) => {
+      const { symbol: b } = innerAsset;
       if (a !== b) {
         const output = `${a.toUpperCase()}${b.toUpperCase()}`;
         fullList.push(output);
@@ -20,10 +22,13 @@ const buildListOfPairs = (listOfIds) => {
 
 const getThreeLetterTickers = (listOfAssets) => {
   const tickersList = [];
-  listOfAssets.map(({ symbol: ticker }) => {
+  const matchingIdList = [];
+  listOfAssets.map((asset) => {
+    const { symbol: ticker } = asset;
     tickersList.push(ticker.toUpperCase());
+    matchingIdList.push({ id: asset.id, symbol: ticker.toUpperCase() });
   });
-  return tickersList;
+  return { tickersList, matchingIdList };
 };
 
 const generateValidGuessList = async () => {
@@ -34,17 +39,11 @@ const generateValidGuessList = async () => {
       return true;
     }
   });
-  const filteredNamesObjects = list.filter(({ name }) => {
-    if (name.length === 6) return true;
-  });
-  const filteredNames = filteredNamesObjects.map(({ name }) =>
-    name.toUpperCase()
-  );
 
-  const validTickers = getThreeLetterTickers(filteredTickers);
-  const validGuessList = [...filteredNames, ...validTickers];
+  const { tickersList: validTickers, matchingIdList: symbolMap } =
+    getThreeLetterTickers(filteredTickers);
 
-  return validGuessList;
+  return { validTickers, symbolMap };
 };
 
 const getCryptoTickerList = async () => {
@@ -55,17 +54,10 @@ const getCryptoTickerList = async () => {
       return true;
     }
   });
-  const filteredNamesObjects = list.filter(({ name }) => {
-    if (name.length === 6) return true;
-  });
-  const filteredNames = filteredNamesObjects.map(({ name }) =>
-    name.toUpperCase()
-  );
 
   const listOfPairs = buildListOfPairs(filteredTickers);
-  const fullList = [...filteredNames, ...listOfPairs];
 
-  return fullList;
+  return listOfPairs;
 };
 
 const updateBank = async () => {
@@ -73,8 +65,10 @@ const updateBank = async () => {
 
   try {
     const bank = await getCryptoTickerList();
-    const validGuesses = await generateValidGuessList();
+    const { validTickers: validGuesses, symbolMap } =
+      await generateValidGuessList();
     cryptleBank.bankSize = bank.length;
+    cryptleBank.symbolMap = symbolMap;
     cryptleBank.bank = bank;
     cryptleBank.updated = Date.now();
     cryptleBank.validGuesses = validGuesses;

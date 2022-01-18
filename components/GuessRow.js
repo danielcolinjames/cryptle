@@ -7,7 +7,6 @@ const GuessRow = ({
   currentGuess,
   guessCorrectness,
 }) => {
-  console.log(currentGuess);
   const [guessLetters, setGuessLetters] = useState([]);
 
   const [finalized, setFinalized] = useState(false);
@@ -26,7 +25,7 @@ const GuessRow = ({
   }, [currentGuessNumber, currentGuess, guessIndex]);
 
   return (
-    <div className="flex flex-row items-center justify-center space-x-1">
+    <div className="flex flex-row items-center justify-center space-x-2">
       <GuessLetter
         finalized={finalized}
         letterIndex={0}
