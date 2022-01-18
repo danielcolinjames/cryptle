@@ -12,6 +12,7 @@ import {
 } from "../game-logic";
 
 import Clipboard from "react-clipboard.js";
+import Image from "next/image";
 
 const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
   const { validGuesses } = cryptleBank;
@@ -104,16 +105,74 @@ const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
     }
   }, [copied]);
 
+  const pageTitle = `Cryptle - ${todaysCryptle.number}`;
+
+  const pageDescription =
+    "A simple crypto ticker guessing game for crypto enthusiasts.";
+  const pageUrl = "https://cryptle.app";
+  const pageOgImageUrl = "https://cryptle.app/images/og.png";
+
   return (
     <div>
       <Head>
-        <title>Cryptle</title>
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#79eda7" />
+        <meta name="msapplication-TileColor" content="#000000" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="keywords" content="crypto, game, wordle" />
+        <meta name="robots" content="index, follow" />
+        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="language" content="English" />
+
+        {/* <!-- Primary Meta Tags --> */}
+        <title>{pageTitle}</title>
+        <meta name="title" content={pageTitle} />
+        <meta name="description" content={pageDescription} />
+
+        {/* <!-- Open Graph / Facebook --> */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={pageUrl} />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:image" content={pageOgImageUrl} />
+
+        {/* <!-- Twitter --> */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={pageUrl} />
+        <meta property="twitter:title" content={pageTitle} />
+        <meta property="twitter:description" content={pageDescription} />
+        <meta property="twitter:image" content={pageOgImageUrl} />
       </Head>
       <div className="flex flex-col items-center justify-between">
         <div className="pt-3 md:pt-4">
-          <span className="text-white font-bold font-sans text-center">
-            {"Cryptle"}
-            <p className="font-bold text-lg md:text-4xl">{`#${todaysCryptle.number}`}</p>
+          <span className="text-white font-bold font-sans text-center flex items-center justify-center">
+            <Image
+              width={15}
+              height={15}
+              src="/images/cryptle-logo.png"
+              alt=""
+            />
+            <span className="ml-2">Cryptle</span>
+          </span>
+          <span className="flex items-center justify-center">
+            <p className="font-bold text-lg md:text-4xl text-gray-300">{`#${todaysCryptle.number}`}</p>
           </span>
         </div>
         <GuessingArea
