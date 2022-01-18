@@ -18,8 +18,6 @@ const GuessingArea = ({
   const color1Hex = `#${rgbHex(r1, g1, b1)}`;
   const color2Hex = `#${rgbHex(r2, g2, b2)}`;
 
-  console.log(color1Hex);
-
   const colorLeft = gameComplete ? color1Hex : "#000000";
   const colorRight = gameComplete ? color2Hex : "#000000";
   return (

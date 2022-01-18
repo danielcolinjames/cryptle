@@ -54,4 +54,25 @@ export const checkIfValidGuess = (guess, validGuesses, errors, setErrors) => {
   }
 };
 
-// export const generateShareText =
+export const generateShareText = (
+  guessCorrectness,
+  todaysCryptle,
+  currentGuessNumber
+) => {
+  const resultText = `Cryptle ${todaysCryptle?.number}: ${currentGuessNumber}/6\n`;
+  guessCorrectness.forEach((row) => {
+    row.map((item, i, { length }) => {
+      if (item === 1) {
+        resultText += `🟩`;
+      } else if (item === -1) {
+        resultText += `🟨`;
+      } else {
+        resultText += `⬛️`;
+      }
+      if (i === length - 1) {
+        resultText += `\n`;
+      }
+    });
+  });
+  return resultText;
+};

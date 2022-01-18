@@ -61,6 +61,7 @@ const getCryptoTickerList = async () => {
 };
 
 const updateBank = async () => {
+  console.log("updating bank");
   const cryptleBank = {};
 
   try {

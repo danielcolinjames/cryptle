@@ -8,7 +8,6 @@ const Key = ({
   icon,
 }) => {
   useKeypress([`${letter?.toLowerCase()}`, `${letter?.toUpperCase()}`], (e) => {
-    console.log(letter);
     if (!!letter && !specialClick && e.key.toUpperCase() === letter) {
       handleLetterClick(letter);
     }

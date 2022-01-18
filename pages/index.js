@@ -8,7 +8,10 @@ import {
   calculateGuessCorrectness,
   checkIfGameComplete,
   checkIfValidGuess,
+  generateShareText,
 } from "../game-logic";
+
+import Clipboard from "react-clipboard.js";
 
 const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
   const { validGuesses } = cryptleBank;
@@ -29,22 +32,6 @@ const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
     return () => {};
   }, [currentGuessNumber]);
 
-  useEffect(() => {
-    if (
-      currentGuess > 0 &&
-      guessCorrectness.length > 0 &&
-      guessCorrectness[currentGuessNumber][0] === todaysCryptle.cryptle[0] &&
-      guessCorrectness[currentGuessNumber][1] === todaysCryptle.cryptle[1] &&
-      guessCorrectness[currentGuessNumber][2] === todaysCryptle.cryptle[2] &&
-      guessCorrectness[currentGuessNumber][3] === todaysCryptle.cryptle[3] &&
-      guessCorrectness[currentGuessNumber][4] === todaysCryptle.cryptle[4] &&
-      guessCorrectness[currentGuessNumber][5] === todaysCryptle.cryptle[5]
-    ) {
-      setGameWon(true);
-      setGameOver(true);
-    }
-  }, [guessCorrectness, currentGuess, todaysCryptle, currentGuessNumber]);
-
   const handleLetterClick = (letter) => {
     setErrors([]);
     setShowErrors(false);
@@ -64,6 +51,8 @@ const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
 
   const [showErrors, setShowErrors] = useState(false);
 
+  const [shareLinkText, setShareLinkText] = useState("");
+
   const handleConfirmGuess = () => {
     const validGuess = checkIfValidGuess(
       currentGuess,
@@ -79,9 +68,11 @@ const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
       );
       setGuessCorrectness([...guessCorrectness, guessCorrectnessRow]);
       const gameComplete = checkIfGameComplete(currentGuess, todaysCryptle);
+      const shareTextContent = generateShareText(guessCorrectness);
       if (gameComplete) {
         setGameWon(true);
         setGameOver(true);
+        setShareLinkText(shareTextContent);
       }
       setCurrentGuessNumber(currentGuessNumber + 1);
       setCurrentGuess("");
@@ -93,6 +84,25 @@ const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
   useKeypress("Enter", (e) => {
     handleConfirmGuess();
   });
+
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    const newShareText = generateShareText(
+      guessCorrectness,
+      todaysCryptle,
+      currentGuessNumber
+    );
+    setShareLinkText(newShareText);
+  }, [guessCorrectness, gameWon, gameOver, todaysCryptle, currentGuessNumber]);
+
+  useEffect(() => {
+    if (copied) {
+      setTimeout(() => {
+        setCopied(false);
+      }, 1000);
+    }
+  }, [copied]);
 
   return (
     <div>
@@ -115,8 +125,23 @@ const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
           guessCorrectness={guessCorrectness}
         />
         {gameWon && (
-          <div className="text-green-400 bg-black rounded-md p-4">
-            You won in {currentGuessNumber} guesses!
+          <div className="text-green-400 bg-black rounded-md p-4 flex flex-col items-center justify-start">
+            <span>You won in {currentGuessNumber} guesses!</span>
+            <Clipboard
+              data-clipboard-text={shareLinkText}
+              onClick={() => setCopied(true)}
+            >
+              <div className="bg-gray-800 rounded-md p-2 mt-5">
+                {copied ? (
+                  <p>Copied to clipboard</p>
+                ) : (
+                  <>
+                    <p>Share result</p>
+                    <p className="text-sm">(copy 🟨🟩⬛️ text to clipboard)</p>
+                  </>
+                )}
+              </div>
+            </Clipboard>
           </div>
         )}
         {showErrors && (
@@ -161,8 +186,6 @@ export async function getStaticProps({ params }) {
       symbol.symbol ===
       `${todaysCryptle.cryptle[3]}${todaysCryptle.cryptle[4]}${todaysCryptle.cryptle[5]}`
   );
-
-  console.log(color1Id);
 
   const color1 = await (
     await fetch(`https://ath.ooo/api/vibes?asset=${color1Id}`)

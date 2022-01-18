@@ -5,8 +5,6 @@ const pickRandomCryptle = async () => {
 
   const cryptleBank = await cache.get("cryptle-bank");
 
-  console.log(cryptleBank);
-
   const randomNumber = Math.floor(Math.random() * cryptleBank.bankSize);
 
   const newCryptle = cryptleBank.bank[randomNumber];
@@ -24,8 +22,6 @@ const getCurrentCryptleNumber = async () => {
 
 const isUniqueCryptle = async (newCryptle) => {
   const recentCryptles = await cache.get("recent-cryptles");
-  console.log("recentCryptles:");
-  console.log(recentCryptles);
 
   if (!recentCryptles) {
     console.log("no recents found");
