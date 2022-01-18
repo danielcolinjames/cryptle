@@ -27,7 +27,6 @@ const IntroSection = ({ setSeenIntro }) => {
           finalized={true}
           letterIndex={0}
           guessLetters={guess1}
-          currentGuess={"BTCHNT"}
           guessHistory={[guess1, guess2]}
           guessCorrectness={guessHistoryExample}
           guessIndex={0}
@@ -37,7 +36,6 @@ const IntroSection = ({ setSeenIntro }) => {
           finalized={true}
           letterIndex={1}
           guessLetters={guess1}
-          currentGuess={"BTCHNT"}
           guessHistory={[guess1, guess2]}
           guessCorrectness={guessHistoryExample}
           guessIndex={0}
@@ -47,7 +45,6 @@ const IntroSection = ({ setSeenIntro }) => {
           finalized={true}
           letterIndex={2}
           guessLetters={guess1}
-          currentGuess={"BTCHNT"}
           guessHistory={[guess1, guess2]}
           guessCorrectness={guessHistoryExample}
           guessIndex={0}
@@ -57,7 +54,6 @@ const IntroSection = ({ setSeenIntro }) => {
           finalized={true}
           letterIndex={3}
           guessLetters={guess1}
-          currentGuess={"BTCHNT"}
           guessHistory={[guess1, guess2]}
           guessCorrectness={guessHistoryExample}
           guessIndex={0}
@@ -67,7 +63,6 @@ const IntroSection = ({ setSeenIntro }) => {
           finalized={true}
           letterIndex={4}
           guessLetters={guess1}
-          currentGuess={"BTCHNT"}
           guessHistory={[guess1, guess2]}
           guessCorrectness={guessHistoryExample}
           guessIndex={0}
@@ -77,7 +72,6 @@ const IntroSection = ({ setSeenIntro }) => {
           finalized={true}
           letterIndex={5}
           guessLetters={guess1}
-          currentGuess={"BTCHNT"}
           guessHistory={[guess1, guess2]}
           guessCorrectness={guessHistoryExample}
           guessIndex={0}
@@ -89,9 +83,8 @@ const IntroSection = ({ setSeenIntro }) => {
         <GuessLetter
           finalized={true}
           letterIndex={0}
-          guessLetters={guess1}
-          currentGuess={"BTCHNT"}
-          guessHistory={[guess1, guess2]}
+          guessLetters={guess2}
+          guessHistory={["asdftt", "asdfasdf"]}
           guessCorrectness={guessHistoryExample}
           guessIndex={1}
           currentGuessNumber={2}
@@ -99,9 +92,8 @@ const IntroSection = ({ setSeenIntro }) => {
         <GuessLetter
           finalized={true}
           letterIndex={1}
-          guessLetters={guess1}
-          currentGuess={"BTCHNT"}
-          guessHistory={[guess1, guess2]}
+          guessLetters={guess2}
+          guessHistory={[guess2, guess2]}
           guessCorrectness={guessHistoryExample}
           guessIndex={1}
           currentGuessNumber={2}
@@ -109,8 +101,7 @@ const IntroSection = ({ setSeenIntro }) => {
         <GuessLetter
           finalized={true}
           letterIndex={2}
-          guessLetters={guess1}
-          currentGuess={"BTCHNT"}
+          guessLetters={guess2}
           guessHistory={[guess1, guess2]}
           guessCorrectness={guessHistoryExample}
           guessIndex={1}
@@ -119,8 +110,7 @@ const IntroSection = ({ setSeenIntro }) => {
         <GuessLetter
           finalized={true}
           letterIndex={3}
-          guessLetters={guess1}
-          currentGuess={"BTCHNT"}
+          guessLetters={guess2}
           guessHistory={[guess1, guess2]}
           guessCorrectness={guessHistoryExample}
           guessIndex={1}
@@ -129,8 +119,7 @@ const IntroSection = ({ setSeenIntro }) => {
         <GuessLetter
           finalized={true}
           letterIndex={4}
-          guessLetters={guess1}
-          currentGuess={"BTCHNT"}
+          guessLetters={guess2}
           guessHistory={[guess1, guess2]}
           guessCorrectness={guessHistoryExample}
           guessIndex={1}
@@ -139,8 +128,7 @@ const IntroSection = ({ setSeenIntro }) => {
         <GuessLetter
           finalized={true}
           letterIndex={5}
-          guessLetters={guess1}
-          currentGuess={"BTCHNT"}
+          guessLetters={guess2}
           guessHistory={[guess1, guess2]}
           guessCorrectness={guessHistoryExample}
           guessIndex={1}
