@@ -31,7 +31,7 @@ const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
 
   useEffect(() => {
     if (checkCookies("cryptle-seen-intro")) {
-      setSeenIntro(false);
+      setSeenIntro(true);
     }
   }, []);
 
