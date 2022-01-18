@@ -100,10 +100,12 @@ const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
         <title>Cryptle</title>
       </Head>
       <div className="flex flex-col items-center justify-between">
-        <span className="text-white text-center">
-          {"Today's Cryptle:"}
-          <p className="font-bold text-xl">{`#${todaysCryptle.number}`}</p>
-        </span>
+        <div className="pt-4">
+          <span className="text-white font-bold font-sans text-center">
+            {"Cryptle"}
+            <p className="font-bold text-4xl">{`#${todaysCryptle.number}`}</p>
+          </span>
+        </div>
         <GuessingArea
           color1={color1}
           color2={color2}
