@@ -26,9 +26,9 @@ const Key = ({
         e.preventDefault();
         handleLetterClick(letter);
       }}
-      className="bg-gray-300 flex items-center justify-center rounded-md px-3 py-2 md:px-4 md:py-3 outline-none focus:outline-none focus:bg-gray-50"
+      className="bg-gray-400 flex items-center justify-center rounded-lg w-full py-2 md:py-3 outline-none focus:outline-none focus:bg-gray-50"
     >
-      <span className="font-sans text-md font-black text-sm md:text-lg">
+      <span className="font-sans text-md font-black text-sm md:text-lg w-full">
         {letter}
       </span>
     </button>

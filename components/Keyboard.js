@@ -8,7 +8,7 @@ const Keyboard = ({
   handleConfirmGuess,
 }) => {
   return (
-    <div className="w-full space-y-0.5 absolute bottom-4 right-0 left-0">
+    <div className="w-full space-y-0.5 absolute bottom-4 right-0 left-0 max-w-2xl mx-auto">
       <KeyboardRow className="px-5">
         <Key letter="Q" handleLetterClick={handleLetterClick} />
         <Key letter="W" handleLetterClick={handleLetterClick} />

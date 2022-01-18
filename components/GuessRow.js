@@ -25,7 +25,7 @@ const GuessRow = ({
   }, [currentGuessNumber, currentGuess, guessIndex]);
 
   return (
-    <div className="flex flex-row items-center justify-center space-x-2">
+    <div className="flex flex-row items-center justify-center space-x-2 md:space-x-4">
       <GuessLetter
         finalized={finalized}
         letterIndex={0}

@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useKeypress from "react-use-keypress";
 import GuessingArea from "../components/GuessingArea";
 import Keyboard from "../components/Keyboard";
@@ -110,10 +110,10 @@ const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
         <title>Cryptle</title>
       </Head>
       <div className="flex flex-col items-center justify-between">
-        <div className="pt-4">
+        <div className="pt-3 md:pt-4">
           <span className="text-white font-bold font-sans text-center">
             {"Cryptle"}
-            <p className="font-bold text-4xl">{`#${todaysCryptle.number}`}</p>
+            <p className="font-bold text-lg md:text-4xl">{`#${todaysCryptle.number}`}</p>
           </span>
         </div>
         <GuessingArea
@@ -125,32 +125,28 @@ const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
           guessCorrectness={guessCorrectness}
         />
         {gameWon && (
-          <div className="text-green-400 bg-black rounded-md p-4 flex flex-col items-center justify-start">
-            <span>You won in {currentGuessNumber} guesses!</span>
+          <div className="absolute z-50 bottom-40 md:bottom-96 text-green-400 bg-gray-700 bg-opacity-90 backdrop-blur-sm rounded-xl px-6 md:px-14 py-5 md:py-10 flex flex-col items-center justify-start">
+            <span className="mb-4">
+              You won in {currentGuessNumber}{" "}
+              {currentGuessNumber === 1 ? "guess" : "guesses"}!
+            </span>
             <Clipboard
               data-clipboard-text={shareLinkText}
               onClick={() => setCopied(true)}
             >
-              <div className="bg-gray-800 rounded-md p-2 mt-5">
-                {copied ? (
-                  <p>Copied to clipboard</p>
-                ) : (
-                  <>
-                    <p>Share result</p>
-                    <p className="text-sm">(copy 🟨🟩⬛️ text to clipboard)</p>
-                  </>
-                )}
+              <div className="bg-gray-200 bg-opacity-90 rounded-md p-2 text-black font-sans font-medium">
+                {copied ? <p>Copied to clipboard</p> : <p>Share result</p>}
               </div>
             </Clipboard>
           </div>
         )}
         {showErrors && (
           <div
+            className="absolute z-50 bottom-40 text-red-400 bg-black bg-opacity-80 backdrop-blur-sm rounded-xl px-4 py-2 flex flex-col items-center justify-start text-xs"
             onClick={() => {
               setShowErrors(false);
               setErrors([]);
             }}
-            className="text-red-400 bg-black rounded-md p-4 space-y-2"
           >
             {errors?.map((error) => (
               <p key={error}>{error}</p>

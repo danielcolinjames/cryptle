@@ -22,7 +22,7 @@ const GuessingArea = ({
   const colorRight = gameComplete ? color2Hex : "#000000";
   return (
     <div
-      className="space-y-2 p-2 my-10 rounded-lg"
+      className="space-y-2 md:space-y-4 p-2 md:p-4 my-10 rounded-lg"
       style={{
         background: `linear-gradient(to right, ${colorLeft} 50%, ${colorRight} 50%)`,
       }}

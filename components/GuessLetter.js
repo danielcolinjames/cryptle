@@ -10,7 +10,7 @@ const GuessLetter = ({
   return (
     <div
       className={classNames(
-        "w-10 h-10 flex items-center justify-center rounded-lg font-black",
+        "w-10 h-10 md:w-14 md:h-14 flex items-center justify-center rounded-lg font-black",
         {
           "bg-gray-600": !finalized,
           "bg-gray-900 text-white": finalized,
@@ -21,7 +21,9 @@ const GuessLetter = ({
         }
       )}
     >
-      <span className="font-sans text-md">{guessLetters[letterIndex]}</span>
+      <span className="font-sans text-md md:text-2xl">
+        {guessLetters[letterIndex]}
+      </span>
     </div>
   );
 };
