@@ -6,23 +6,56 @@ const GuessRow = ({
   currentGuessNumber,
   currentGuess,
   guessCorrectness,
+  guessHistory,
 }) => {
-  const [guessLetters, setGuessLetters] = useState([]);
+  const [guessLetters, setGuessLetters] = useState(
+    guessHistory[guessIndex] ? guessHistory[guessIndex].split("") : []
+  );
 
   const [finalized, setFinalized] = useState(false);
 
+  const [thisRowGuess, setThisRowGuess] = useState(currentGuess);
+
   useEffect(() => {
     if (currentGuessNumber > guessIndex) {
+      if (
+        currentGuess === "" &&
+        guessCorrectness.length > 0 &&
+        guessHistory.length > 0
+      ) {
+        setThisRowGuess(guessHistory[guessIndex]);
+      }
       setFinalized(true);
     }
-  }, [currentGuessNumber, guessIndex]);
+  }, [
+    currentGuess,
+    currentGuessNumber,
+    guessCorrectness.length,
+    guessHistory,
+    guessIndex,
+  ]);
+
+  useEffect(() => {
+    if (guessHistory.length >= currentGuessNumber) {
+      // if data is from cookies
+      const letters = thisRowGuess?.split("");
+      setGuessLetters(letters);
+    }
+  }, [
+    currentGuessNumber,
+    currentGuess,
+    guessIndex,
+    thisRowGuess,
+    finalized,
+    guessHistory.length,
+  ]);
 
   useEffect(() => {
     if (guessIndex === currentGuessNumber) {
-      const letters = currentGuess?.split("");
+      const letters = currentGuess.split("");
       setGuessLetters(letters);
     }
-  }, [currentGuessNumber, currentGuess, guessIndex]);
+  }, [currentGuessNumber, currentGuess, guessIndex, thisRowGuess, finalized]);
 
   return (
     <div className="flex flex-row items-center justify-center space-x-2 md:space-x-4">

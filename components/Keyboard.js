@@ -50,8 +50,8 @@ const Keyboard = ({
               />
             </svg>
           }
-          specialClasses="w-14 bg-green-300 rounded-md flex items-center justify-center px-2 py-1.5 md:px-4 md:py-3.5"
           specialClick={handleConfirmGuess}
+          specialClasses="bg-green-300"
         />
         <Key letter="Z" handleLetterClick={handleLetterClick} />
         <Key letter="X" handleLetterClick={handleLetterClick} />
@@ -77,8 +77,8 @@ const Keyboard = ({
               />
             </svg>
           }
-          specialClasses="w-14 bg-red-300 rounded-md flex items-center justify-center px-2 py-1.5 md:px-4 md:py-3.5"
           specialClick={handleBackspace}
+          specialClasses="bg-red-300"
         />
       </KeyboardRow>
     </div>

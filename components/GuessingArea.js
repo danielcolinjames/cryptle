@@ -8,6 +8,7 @@ const GuessingArea = ({
   currentGuessNumber,
   currentGuess,
   guessCorrectness,
+  guessHistory,
 }) => {
   const { Vibrant: vibrant1 } = color1;
   const { Vibrant: vibrant2 } = color2;
@@ -20,6 +21,9 @@ const GuessingArea = ({
 
   const colorLeft = gameComplete ? color1Hex : "#000000";
   const colorRight = gameComplete ? color2Hex : "#000000";
+
+  console.log(colorLeft);
+  console.log(gameComplete);
   return (
     <div
       className="space-y-2 md:space-y-4 p-2 md:p-4 my-10 rounded-lg"
@@ -32,36 +36,42 @@ const GuessingArea = ({
         currentGuessNumber={currentGuessNumber}
         currentGuess={currentGuess}
         guessCorrectness={guessCorrectness}
+        guessHistory={guessHistory}
       />
       <GuessRow
         guessIndex={1}
         currentGuessNumber={currentGuessNumber}
         currentGuess={currentGuess}
         guessCorrectness={guessCorrectness}
+        guessHistory={guessHistory}
       />
       <GuessRow
         guessIndex={2}
         currentGuessNumber={currentGuessNumber}
         currentGuess={currentGuess}
         guessCorrectness={guessCorrectness}
+        guessHistory={guessHistory}
       />
       <GuessRow
         guessIndex={3}
         currentGuessNumber={currentGuessNumber}
         currentGuess={currentGuess}
         guessCorrectness={guessCorrectness}
+        guessHistory={guessHistory}
       />
       <GuessRow
         guessIndex={4}
         currentGuessNumber={currentGuessNumber}
         currentGuess={currentGuess}
         guessCorrectness={guessCorrectness}
+        guessHistory={guessHistory}
       />
       <GuessRow
         guessIndex={5}
         currentGuessNumber={currentGuessNumber}
         currentGuess={currentGuess}
         guessCorrectness={guessCorrectness}
+        guessHistory={guessHistory}
       />
     </div>
   );

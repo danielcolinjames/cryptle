@@ -4,27 +4,81 @@ import useKeypress from "react-use-keypress";
 import GuessingArea from "../components/GuessingArea";
 import Keyboard from "../components/Keyboard";
 import cache from "../data/client-cache";
+import { formatDistanceToNowStrict, addDays } from "date-fns";
 import {
   calculateGuessCorrectness,
   checkIfGameComplete,
   checkIfValidGuess,
   generateShareText,
 } from "../game-logic";
+import { setCookies, checkCookies, getCookie } from "cookies-next";
 
 import Clipboard from "react-clipboard.js";
 import Image from "next/image";
+import GuessLetter from "../components/GuessLetter";
+import GuessRow from "../components/GuessRow";
 
 const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
-  const { validGuesses } = cryptleBank;
+  const [seenIntro, setSeenIntro] = useState(false);
 
-  const [gameOver, setGameOver] = useState(false);
-  const [gameWon, setGameWon] = useState(false);
+  useEffect(() => {
+    if (seenIntro) {
+      setCookies("cryptle-seen-intro", true, {
+        expires: new Date(Number(new Date() + 365 * 24 * 60 * 60 * 1000)),
+      });
+    }
+  }, [seenIntro]);
+
+  useEffect(() => {
+    if (checkCookies("cryptle-seen-intro")) {
+      setSeenIntro(false);
+    }
+  }, []);
+
+  const date = addDays(new Date(todaysCryptle.date), 1);
+  const time = formatDistanceToNowStrict(date, {
+    addSuffix: true,
+  });
+  const { validGuesses } = cryptleBank;
 
   const [currentGuessNumber, setCurrentGuessNumber] = useState(0);
   const [currentGuess, setCurrentGuess] = useState("");
   const [guessCorrectness, setGuessCorrectness] = useState([]);
 
+  const [guessHistory, setGuessHistory] = useState([]);
+
   const [errors, setErrors] = useState([]);
+
+  const [gameOver, setGameOver] = useState(false);
+  const [gameWon, setGameWon] = useState(false);
+
+  useEffect(() => {
+    const cookieExists = checkCookies(`cryptle-${todaysCryptle.number}`);
+    const cookie = cookieExists
+      ? getCookie(`cryptle-${todaysCryptle.number}`)
+      : null;
+    const parsedCookie = cookie ? JSON.parse(cookie) : null;
+
+    const initialGuessCorrectness = parsedCookie?.guessCorrectness
+      ? parsedCookie.guessCorrectness
+      : [];
+    const initialGuessHistory = parsedCookie?.guessHistory
+      ? parsedCookie.guessHistory
+      : [];
+    const initialCurrentGuessNumber = parsedCookie?.currentGuessNumber
+      ? parsedCookie.currentGuessNumber
+      : 0;
+    const initialGameWon = parsedCookie?.gameWon ? parsedCookie.gameWon : false;
+    const initialGameOver = parsedCookie?.gameOver
+      ? parsedCookie.gameOver
+      : false;
+
+    setGuessCorrectness(initialGuessCorrectness);
+    setGuessHistory(initialGuessHistory);
+    setCurrentGuessNumber(initialCurrentGuessNumber);
+    setGameWon(initialGameWon);
+    setGameOver(initialGameOver);
+  }, [todaysCryptle.number]);
 
   useEffect(() => {
     if (currentGuessNumber === 6) {
@@ -54,7 +108,7 @@ const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
 
   const [shareLinkText, setShareLinkText] = useState("");
 
-  const handleConfirmGuess = () => {
+  const handleConfirmGuess = async () => {
     const validGuess = checkIfValidGuess(
       currentGuess,
       validGuesses,
@@ -68,13 +122,16 @@ const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
         todaysCryptle
       );
       setGuessCorrectness([...guessCorrectness, guessCorrectnessRow]);
+      setGuessHistory([...guessHistory, currentGuess]);
       const gameComplete = checkIfGameComplete(currentGuess, todaysCryptle);
       const shareTextContent = generateShareText(guessCorrectness);
+
       if (gameComplete) {
         setGameWon(true);
         setGameOver(true);
         setShareLinkText(shareTextContent);
       }
+
       setCurrentGuessNumber(currentGuessNumber + 1);
       setCurrentGuess("");
     } else {
@@ -95,7 +152,22 @@ const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
       currentGuessNumber
     );
     setShareLinkText(newShareText);
-  }, [guessCorrectness, gameWon, gameOver, todaysCryptle, currentGuessNumber]);
+
+    setCookies(
+      `cryptle-${todaysCryptle.number}`,
+      { guessCorrectness, guessHistory, currentGuessNumber, gameWon, gameOver },
+      {
+        expires: new Date(Number(new Date() + 365 * 24 * 60 * 60 * 1000)),
+      }
+    );
+  }, [
+    guessCorrectness,
+    gameWon,
+    gameOver,
+    todaysCryptle,
+    currentGuessNumber,
+    guessHistory,
+  ]);
 
   useEffect(() => {
     if (copied) {
@@ -178,12 +250,215 @@ const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
         <GuessingArea
           color1={color1}
           color2={color2}
-          gameComplete={gameWon}
+          gameComplete={gameWon || gameOver}
           currentGuessNumber={currentGuessNumber}
           currentGuess={currentGuess}
+          guessHistory={guessHistory}
           guessCorrectness={guessCorrectness}
         />
-        {gameWon && (
+        {!gameOver && !gameWon && !seenIntro && (
+          <div
+            className="absolute z-50 bottom-40 md:bottom-96 text-green-400 bg-gray-700 bg-opacity-90 backdrop-blur-sm rounded-xl px-6 md:px-14 py-5 md:py-10 flex flex-col items-center justify-start max-w-xl text-center space-y-4 mx-4"
+            onClick={() => setSeenIntro(true)}
+          >
+            <p className="text-2xl text-white font-bold mt-2 mb-4">
+              Welcome to Cryptle!
+            </p>
+            <p>
+              A Cryptle consists of two ticker symbols from the top 100 crypto
+              assets by market cap, according to CoinGecko.
+            </p>
+            <p>Every 24 hours, a new Cryptle will be generated.</p>
+            <p>A green square means you got that letter correct.</p>
+            <div className="flex flex-row items-center justify-center space-x-2 md:space-x-4">
+              <GuessLetter
+                finalized={true}
+                letterIndex={0}
+                guessLetters={"BTCHNT"}
+                currentGuess={"BTCHNT"}
+                guessHistory={["BTCHNT", "LRCXRP"]}
+                guessCorrectness={[
+                  [0, 0, 1, 0, 0, 0],
+                  [1, 1, 1, -1, -1, 0],
+                ]}
+                guessIndex={0}
+                currentGuessNumber={2}
+              />
+              <GuessLetter
+                finalized={true}
+                letterIndex={1}
+                guessLetters={"BTCHNT"}
+                currentGuess={"BTCHNT"}
+                guessHistory={["BTCHNT", "LRCXRP"]}
+                guessCorrectness={[
+                  [0, 0, 1, 0, 0, 0],
+                  [1, 1, 1, -1, -1, 0],
+                ]}
+                guessIndex={0}
+                currentGuessNumber={2}
+              />
+              <GuessLetter
+                finalized={true}
+                letterIndex={2}
+                guessLetters={"BTCHNT"}
+                currentGuess={"BTCHNT"}
+                guessHistory={["BTCHNT", "LRCXRP"]}
+                guessCorrectness={[
+                  [0, 0, 1, 0, 0, 0],
+                  [1, 1, 1, -1, -1, 0],
+                ]}
+                guessIndex={0}
+                currentGuessNumber={2}
+              />
+              <GuessLetter
+                finalized={true}
+                letterIndex={3}
+                guessLetters={"BTCHNT"}
+                currentGuess={"BTCHNT"}
+                guessHistory={["BTCHNT", "LRCXRP"]}
+                guessCorrectness={[
+                  [0, 0, 1, 0, 0, 0],
+                  [1, 1, 1, -1, -1, 0],
+                ]}
+                guessIndex={0}
+                currentGuessNumber={2}
+              />
+              <GuessLetter
+                finalized={true}
+                letterIndex={4}
+                guessLetters={"BTCHNT"}
+                currentGuess={"BTCHNT"}
+                guessHistory={["BTCHNT", "LRCXRP"]}
+                guessCorrectness={[
+                  [0, 0, 1, 0, 0, 0],
+                  [1, 1, 1, -1, -1, 0],
+                ]}
+                guessIndex={0}
+                currentGuessNumber={2}
+              />
+              <GuessLetter
+                finalized={true}
+                letterIndex={5}
+                guessLetters={"BTCHNT"}
+                currentGuess={"BTCHNT"}
+                guessHistory={["BTCHNT", "LRCXRP"]}
+                guessCorrectness={[
+                  [0, 0, 1, 0, 0, 0],
+                  [1, 1, 1, -1, -1, 0],
+                ]}
+                guessIndex={0}
+                currentGuessNumber={2}
+              />
+            </div>
+            <p>
+              A yellow square means that letter appears somewhere in the
+              Cryptle.
+            </p>
+            <div className="flex flex-row items-center justify-center space-x-2 md:space-x-4">
+              <GuessLetter
+                finalized={true}
+                letterIndex={0}
+                guessLetters={"LRCXRP"}
+                currentGuess={"LRCXRP"}
+                guessHistory={["BTCHNT", "LRCXRP"]}
+                guessCorrectness={[
+                  [0, 0, 1, 0, 0, 0],
+                  [1, 1, 1, -1, -1, 0],
+                ]}
+                guessIndex={1}
+                currentGuessNumber={2}
+              />
+              <GuessLetter
+                finalized={true}
+                letterIndex={1}
+                guessLetters={"LRCXRP"}
+                currentGuess={"LRCXRP"}
+                guessHistory={["BTCHNT", "LRCXRP"]}
+                guessCorrectness={[
+                  [0, 0, 1, 0, 0, 0],
+                  [1, 1, 1, -1, -1, 0],
+                ]}
+                guessIndex={1}
+                currentGuessNumber={2}
+              />
+              <GuessLetter
+                finalized={true}
+                letterIndex={2}
+                guessLetters={"LRCXRP"}
+                currentGuess={"LRCXRP"}
+                guessHistory={["BTCHNT", "LRCXRP"]}
+                guessCorrectness={[
+                  [0, 0, 1, 0, 0, 0],
+                  [1, 1, 1, -1, -1, 0],
+                ]}
+                guessIndex={1}
+                currentGuessNumber={2}
+              />
+              <GuessLetter
+                finalized={true}
+                letterIndex={3}
+                guessLetters={"LRCXRP"}
+                currentGuess={"LRCXRP"}
+                guessHistory={["BTCHNT", "LRCXRP"]}
+                guessCorrectness={[
+                  [0, 0, 1, 0, 0, 0],
+                  [1, 1, 1, -1, -1, 0],
+                ]}
+                guessIndex={1}
+                currentGuessNumber={2}
+              />
+              <GuessLetter
+                finalized={true}
+                letterIndex={4}
+                guessLetters={"LRCXRP"}
+                currentGuess={"LRCXRP"}
+                guessHistory={["BTCHNT", "LRCXRP"]}
+                guessCorrectness={[
+                  [0, 0, 1, 0, 0, 0],
+                  [1, 1, 1, -1, -1, 0],
+                ]}
+                guessIndex={1}
+                currentGuessNumber={2}
+              />
+              <GuessLetter
+                finalized={true}
+                letterIndex={5}
+                guessLetters={"LRCXRP"}
+                currentGuess={"LRCXRP"}
+                guessHistory={["BTCHNT", "LRCXRP"]}
+                guessCorrectness={[
+                  [0, 0, 1, 0, 0, 0],
+                  [1, 1, 1, -1, -1, 0],
+                ]}
+                guessIndex={1}
+                currentGuessNumber={2}
+              />
+            </div>
+            <p>Tap or click this box to dismiss it. Good luck!</p>
+          </div>
+        )}
+        {gameOver && !gameWon && (
+          <div className="absolute z-50 bottom-40 md:bottom-96 text-green-400 bg-gray-700 bg-opacity-90 backdrop-blur-sm rounded-xl px-6 md:px-14 py-5 md:py-10 flex flex-col items-center justify-start">
+            <span className="">Good effort! The answer was</span>
+            <p className="text-2xl text-white font-bold mt-2 mb-4">
+              {todaysCryptle.cryptle}
+            </p>
+            <Clipboard
+              data-clipboard-text={shareLinkText}
+              onClick={() => setCopied(true)}
+            >
+              <div className="bg-gray-200 bg-opacity-90 rounded-md p-2 text-black font-sans font-medium">
+                {copied ? (
+                  <p>Copied to clipboard</p>
+                ) : (
+                  <p>Copy game result to clipboard</p>
+                )}
+              </div>
+            </Clipboard>
+            <p className="mt-4">New cryptle {time}</p>
+          </div>
+        )}
+        {gameWon && gameOver && (
           <div className="absolute z-50 bottom-40 md:bottom-96 text-green-400 bg-gray-700 bg-opacity-90 backdrop-blur-sm rounded-xl px-6 md:px-14 py-5 md:py-10 flex flex-col items-center justify-start">
             <span className="mb-4">
               You won in {currentGuessNumber}{" "}
@@ -197,15 +472,16 @@ const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
                 {copied ? (
                   <p>Copied to clipboard</p>
                 ) : (
-                  <p>Copy result to clipboard</p>
+                  <p>Copy game result to clipboard</p>
                 )}
               </div>
             </Clipboard>
+            <p className="mt-4">New cryptle {time}</p>
           </div>
         )}
         {showErrors && (
           <div
-            className="absolute z-50 bottom-40 text-red-400 bg-black bg-opacity-80 backdrop-blur-sm rounded-xl px-4 py-2 flex flex-col items-center justify-start text-xs"
+            className="absolute z-50 bottom-40 md:bottom-96 text-red-400 bg-gray-700 bg-opacity-90 backdrop-blur-sm rounded-xl px-6 md:px-14 py-5 flex flex-col items-center justify-start text-xs"
             onClick={() => {
               setShowErrors(false);
               setErrors([]);
@@ -216,7 +492,7 @@ const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
             ))}
           </div>
         )}
-        <div className="max-w-xl mx-auto">
+        <div className="max-w-xl mx-auto flex">
           <Keyboard
             handleLetterClick={handleLetterClick}
             handleBackspace={handleBackspace}
