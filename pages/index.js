@@ -277,7 +277,7 @@ const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
                 )}
               </div>
             </Clipboard>
-            <p className="mt-4">New cryptle {time}</p>
+            <p className="mt-4">New Cryptle {time}</p>
           </div>
         )}
         {gameWon && gameOver && (
@@ -298,7 +298,7 @@ const Home = ({ todaysCryptle, cryptleBank, color1, color2 }) => {
                 )}
               </div>
             </Clipboard>
-            <p className="mt-4">New cryptle {time}</p>
+            <p className="mt-4">New Cryptle {time}</p>
           </div>
         )}
         {showErrors && (
