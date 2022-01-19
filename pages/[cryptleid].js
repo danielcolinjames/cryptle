@@ -20,15 +20,9 @@ const CryptlePage = ({
 };
 
 export async function getStaticPaths() {
-  const recents = await cache.get("recent-cryptles");
-
   return {
-    paths: recents.map((cryptle) => ({
-      params: {
-        cryptleid: `${cryptle.number}`,
-      },
-    })),
-    fallback: "blocking",
+    paths: [],
+    fallback: false,
   };
 }
 
