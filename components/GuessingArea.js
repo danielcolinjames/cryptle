@@ -22,8 +22,6 @@ const GuessingArea = ({
   const colorLeft = gameComplete ? color1Hex : "#000000";
   const colorRight = gameComplete ? color2Hex : "#000000";
 
-  console.log(colorLeft);
-  console.log(gameComplete);
   return (
     <div
       className="space-y-2 md:space-y-4 p-2 md:p-4 my-10 rounded-lg"

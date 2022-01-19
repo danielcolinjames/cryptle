@@ -9,10 +9,7 @@ const IntroSection = ({ setSeenIntro }) => {
     [1, 1, 1, -1, -1, 0],
   ];
   return (
-    <div
-      className="absolute z-50 top-20 bottom-10 w-full text-green-400 bg-gray-700 bg-opacity-90 backdrop-blur-sm rounded-xl px-6 md:px-14 py-5 md:py-10 flex flex-col items-center justify-start max-w-xl text-center space-y-4"
-      onClick={() => setSeenIntro(true)}
-    >
+    <div className="absolute z-50 top-20 bottom-0 md:top-40 w-full text-green-400 bg-gray-700 bg-opacity-90 backdrop-blur-sm rounded-xl px-6 md:px-14 py-5 md:py-10 flex flex-col items-center justify-start max-w-xl text-center space-y-4 md:h-auto md:bottom-auto text-sm">
       <p className="text-2xl text-white font-bold mt-2 mb-4">
         Welcome to Cryptle!
       </p>
@@ -135,7 +132,14 @@ const IntroSection = ({ setSeenIntro }) => {
           currentGuessNumber={2}
         />
       </div>
-      <p>Tap or click this box to dismiss it. Good luck!</p>
+      <div className="pt-2">
+        <button
+          className="bg-gray-200 transition-all hover:bg-white focus:bg-gray-300 duration-100 text-black font-sans font-semibold px-4 py-2 rounded-md mt-5"
+          onClick={() => setSeenIntro(true)}
+        >
+          {"Let's do this!"}
+        </button>
+      </div>
     </div>
   );
 };
