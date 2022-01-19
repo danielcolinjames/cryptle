@@ -93,7 +93,7 @@ const About = () => {
           {" the code."}
         </p>
         <p className="text-white text-left text-sm font-light">
-          If you liked it, feel free to{" "}
+          If you like it, feel free to{" "}
           <a
             href="https://twitter.com/dcwj"
             target="_blank"
@@ -105,8 +105,8 @@ const About = () => {
           on Twitter!
         </p>
         <p className="text-white text-left text-sm font-light">
-          Or if you <span className="italic">really</span> liked it, feel free
-          to send some crypto my way.
+          Or if you <span className="italic">really</span> like it, feel free to
+          send some crypto my way.
         </p>
         <div className="grid sm:grid-cols-12 gap-2 sm:rounded-lg sm:py-4">
           <NameOfCrypto name="ETH" bracketText="or ERC-20" />
