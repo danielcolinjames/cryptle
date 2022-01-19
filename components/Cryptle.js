@@ -25,7 +25,7 @@ const Cryptle = ({
   color2,
   isOldCryptle = false,
 }) => {
-  const [seenIntro, setSeenIntro] = useState(true);
+  const [seenIntro, setSeenIntro] = useState(false);
 
   const formattedDate = format(new Date(todaysCryptle.date), "MMM d, yyyy");
 
@@ -40,8 +40,6 @@ const Cryptle = ({
   useEffect(() => {
     if (checkCookies("cryptle-seen-intro")) {
       setSeenIntro(true);
-    } else {
-      setSeenIntro(false);
     }
   }, []);
 
